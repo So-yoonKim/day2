@@ -23,7 +23,7 @@
     p { margin: 0; }
     footer { text-align: center; font-size: 0.85rem; color: #888; padding: 1.25rem; }
 
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
       #menuBtn { display: block; }
       nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #1d4ed8; }
       nav.open { display: block; }
@@ -72,7 +72,7 @@
 
     btn.addEventListener('click', () => setOpen(!nav.classList.contains('open')));
     nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
-    window.addEventListener('resize', () => { if (innerWidth > 640) setOpen(false); });
+    window.addEventListener('resize', () => { if (innerWidth > 768) setOpen(false); });
   </script>
 </body>
 </html>
