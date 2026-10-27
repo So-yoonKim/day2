@@ -97,6 +97,21 @@
       border-radius: 10px;
     }
 
+    #chatOpen {
+      position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 10;
+      padding: 0.8rem 1.2rem; border: 0; border-radius: 999px;
+      background: #ff9f1c; color: #fff; font-size: 1rem; font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0,0,0,.25); cursor: pointer;
+    }
+    #chatBox {
+      position: fixed; right: 1.25rem; bottom: 4.5rem; z-index: 10;
+      width: 360px; max-width: calc(100vw - 2.5rem); height: 520px; max-height: calc(100vh - 6rem);
+      border-radius: 12px; overflow: hidden; background: #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,.3); display: none;
+    }
+    #chatBox.open { display: block; }
+    #chatBox iframe { width: 100%; height: 100%; border: 0; }
+
     @media (max-width: 640px) {
       .page {
         grid-template-columns: 1fr;
@@ -177,8 +192,24 @@
     </footer>
   </div>
 
+  <button id="chatOpen">💬 에이전트와 채팅</button>
+  <div id="chatBox"></div>
+
   <script>
     const $ = id => document.getElementById(id);
+
+    $('chatOpen').onclick = () => {
+      const box = $('chatBox');
+      if (!box.firstChild) {
+        const f = document.createElement('iframe');
+        f.src = 'agent.html';
+        f.title = '제주 귤 에이전트 채팅';
+        box.appendChild(f);
+      }
+      const open = box.classList.toggle('open');
+      $('chatOpen').textContent = open ? '✖ 닫기' : '💬 에이전트와 채팅';
+    };
+
     const PER_PAGE = 10, SLIDE_MS = 2000;
     let images = [], idx = 0, page = 1, query = '', total = 0, timer = null;
 
