@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        const f = (i) =>i*2
+        let ops =[1,22,3,5,7]
+        let ops2 = [
+            {'a':10},
+            {'a':20},
+            {'a':30},
+            {'a':40},
+            {'a':50},
+        ]
+ for(const i of ops) {
+            console.log(f(i))
+ }
+
+        for(const i of ops2) {
+            console.log(f(i['a']) +f(i))
+        }
+
+    </script>
+</body>
+</html>
