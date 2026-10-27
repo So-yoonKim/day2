@@ -23,6 +23,7 @@ module.exports = async (req, res) => {
     const data = await r.json();
     res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
     return res.status(200).json({
+      total: data.totalHits,
       hits: data.hits.map(h => ({ url: h.webformatURL, tags: h.tags }))
     });
   } catch (e) {
