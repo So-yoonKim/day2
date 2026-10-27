@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반응형 메뉴</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: sans-serif; background: #f5f7fa; color: #333; line-height: 1.6; }
+    header { background: #2563eb; color: #fff; position: sticky; top: 0; z-index: 10; }
+    .bar { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 1rem; min-height: 56px; position: relative; }
+    .brand { font-weight: bold; font-size: 1.15rem; }
+    nav ul { display: flex; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
+    nav a { display: block; padding: 0.6rem 1rem; color: #fff; text-decoration: none; border-radius: 6px; }
+    nav a:hover, nav a.active { background: rgba(255, 255, 255, 0.25); }
+    #menuBtn {
+      display: none; width: 44px; height: 44px; padding: 0; border: 0; background: none;
+      color: #fff; font-size: 1.6rem; cursor: pointer;
+    }
+    main { max-width: 960px; margin: 0 auto; padding: 1.25rem 1rem; display: grid; gap: 1rem; }
+    section { background: #fff; border-radius: 10px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,.08); scroll-margin-top: 70px; }
+    h2 { margin: 0 0 0.5rem; font-size: 1.2rem; color: #2563eb; }
+    p { margin: 0; }
+    footer { text-align: center; font-size: 0.85rem; color: #888; padding: 1.25rem; }
+
+    @media (max-width: 640px) {
+      #menuBtn { display: block; }
+      nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #1d4ed8; }
+      nav.open { display: block; }
+      nav ul { flex-direction: column; gap: 0; padding: 0.5rem; }
+      nav a { padding: 0.9rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <span class="brand">🌐 반응형 메뉴</span>
+      <button id="menuBtn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav">☰</button>
+      <nav id="nav">
+        <ul>
+          <li><a href="#food">음식</a></li>
+          <li><a href="#furniture">가구</a></li>
+          <li><a href="#realestate">부동산</a></li>
+          <li><a href="#stock">주식</a></li>
+          <li><a href="#map">지도</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="food"><h2>🍜 음식</h2><p>맛집, 레시피, 지역 특산물 정보를 모아 보는 곳입니다.</p></section>
+    <section id="furniture"><h2>🛋️ 가구</h2><p>침대, 소파, 책상 등 가구 정보를 살펴보는 곳입니다.</p></section>
+    <section id="realestate"><h2>🏠 부동산</h2><p>매매·전월세 등 부동산 정보를 정리하는 곳입니다.</p></section>
+    <section id="stock"><h2>📈 주식</h2><p>종목과 시장 동향을 확인하는 곳입니다. (투자 권유 아님)</p></section>
+    <section id="map"><h2>🗺️ 지도</h2><p>위치와 길 찾기 정보를 보여주는 곳입니다.</p></section>
+  </main>
+
+  <footer>© 반응형 메뉴 예제 (학습용)</footer>
+
+  <script>
+    const btn = document.getElementById('menuBtn');
+    const nav = document.getElementById('nav');
+
+    function setOpen(open) {
+      nav.classList.toggle('open', open);
+      btn.textContent = open ? '✕' : '☰';
+      btn.setAttribute('aria-expanded', open);
+      btn.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+    }
+
+    btn.addEventListener('click', () => setOpen(!nav.classList.contains('open')));
+    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+    window.addEventListener('resize', () => { if (innerWidth > 640) setOpen(false); });
+  </script>
+</body>
+</html>

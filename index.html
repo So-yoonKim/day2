@@ -112,11 +112,42 @@
     #chatBox.open { display: block; }
     #chatBox iframe { width: 100%; height: 100%; border: 0; }
 
+    /* 동적(반응형) 보정 */
+    html { -webkit-text-size-adjust: 100%; }
+    img { max-width: 100%; }
+    section, article, aside { min-width: 0; }
+    header h1 { font-size: clamp(1.35rem, 4vw + 0.6rem, 2rem); }
+    header p { font-size: clamp(0.85rem, 1.5vw + 0.55rem, 1rem); }
+    .slider img { height: auto; aspect-ratio: 4 / 3; max-height: 70vh; }
+    nav a, button { min-height: 44px; }
+    nav a { display: flex; align-items: center; }
+    .search input { min-width: 0; }
+
+    /* 태블릿 */
+    @media (max-width: 900px) {
+      .page { grid-template-columns: 3fr 2fr; padding: 0.6rem; }
+    }
+
+    /* 모바일 */
     @media (max-width: 640px) {
       .page {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         grid-template-areas: "header" "nav" "section" "article" "aside" "footer";
+        gap: 0.6rem;
+        padding: 0.5rem;
       }
+      section, article, aside { padding: 1rem; }
+      nav ul { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      nav li { flex: 0 0 auto; }
+      .info { gap: 0.5rem; font-size: 0.8rem; }
+      .info button { padding: 0.45rem 0.7rem; }
+      #chatOpen { right: 0.75rem; bottom: calc(0.75rem + env(safe-area-inset-bottom)); }
+      #chatBox {
+        right: 0; left: 0; bottom: 0; top: 0;
+        width: 100%; max-width: none; height: 100%; max-height: none;
+        border-radius: 0;
+      }
+      #chatOpen.isOpen { z-index: 11; top: calc(0.5rem + env(safe-area-inset-top)); bottom: auto; right: 0.6rem; }
     }
   </style>
 </head>
@@ -207,6 +238,7 @@
         box.appendChild(f);
       }
       const open = box.classList.toggle('open');
+      $('chatOpen').classList.toggle('isOpen', open);
       $('chatOpen').textContent = open ? '✖ 닫기' : '💬 에이전트와 채팅';
     };
 
