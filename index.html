@@ -191,6 +191,7 @@
         images = data.hits; idx = 0;
         $('msg').textContent = '';
         show();
+        startAuto();
       } catch (e) {
         $('msg').textContent = e.message;
       }
@@ -206,8 +207,13 @@
 
     $('search').onclick = () => { query = $('q').value.trim(); page = 1; load(); };
     $('q').addEventListener('keydown', e => { if (e.key === 'Enter') $('search').click(); });
-    $('prev').onclick = () => { idx = (idx - 1 + images.length) % images.length; show(); };
-    $('next').onclick = () => { idx = (idx + 1) % images.length; show(); };
+    let timer = null;
+    function startAuto() {
+      clearInterval(timer);
+      timer = setInterval(() => { idx = (idx + 1) % images.length; show(); }, 500);
+    }
+    $('prev').onclick = () => { idx = (idx - 1 + images.length) % images.length; show(); startAuto(); };
+    $('next').onclick = () => { idx = (idx + 1) % images.length; show(); startAuto(); };
     $('more').onclick = () => { page++; load(); };
   </script>
 </body>
