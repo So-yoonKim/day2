@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계산기</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 2rem; background: #f6f1ea; margin: 0; min-height: 100vh; }
+        #calc { width: 320px; align-self: flex-start; border-radius: 20px; background: #fbf0dc; box-shadow: 0 6px 20px rgba(0,0,0,.12); overflow: hidden; }
+        #title { background: #d9954f; color: #fff; font-weight: bold; font-size: 1.65rem; padding: 14px 16px; }
+        #panel { padding: 14px; }
+        #display { background: #fff; text-align: right; font-size: 1.5rem; padding: 12px 14px; border: 1px solid #ddd; border-radius: 12px; margin-bottom: 14px; min-height: 3.4rem; word-break: break-all; }
+        #keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        button { font-size: 1.3rem; border: 0; cursor: pointer; color: #fff; font-weight: bold; }
+        button.digit, button.op { aspect-ratio: 1; border-radius: 50%; padding: 0; }
+        button.digit { background: #d9893f; }
+        button.op { background: #5f9a74; }
+        button.fn { background: #d9954f; border-radius: 999px; padding: 12px 0; grid-column: 1 / -1; }
+    </style>
+    <script>
+        function plus(a,b){
+            return a+b
+        }
+
+        function minus(a,b){
+            return a-b
+        }
+
+        function mul(a,b){
+            return a*b
+        }
+
+        function div(a,b){
+            return a/b
+        }
+
+        // 연산 버튼마다 달라지는 것(버튼 id, 기호, 함수)만 표로 모아 둔다.
+        var operations = [
+            { id: 'plus',  symbol: '+', fn: plus },
+            { id: 'minus', symbol: '-', fn: minus },
+            { id: 'mul',   symbol: 'x', fn: mul },
+            { id: 'div',   symbol: '/', fn: div }
+        ];
+
+        var expression = '';     // 화면에 보여 줄 수식 (예: '7 + 8 x ')
+        var current = '';        // 지금 입력 중인 숫자 (문자열)
+        var stored = null;       // 연산기호를 누르기 전에 입력해 둔 앞의 숫자
+        var pending = null;      // 눌러 둔 연산 (operations 의 한 항목)
+        var justCalculated = false;
+
+        function show(text) {
+            document.querySelector('#display').textContent = text;
+        }
+
+        // 입력 중에는 수식 전체(지금까지의 수식 + 입력 중인 숫자)를 보여 준다.
+        function showExpression() {
+            show((expression + current) || '0');
+        }
+
+        // 계산하고, 0.1+0.2 같은 소수 오차를 정리한다.
+        function calculate(op, a, b) {
+            if (op.id === 'div' && b === 0) {
+                return null;
+            }
+            return parseFloat(op.fn(a, b).toFixed(10));
+        }
+
+        function reset(message) {
+            expression = '';
+            current = '';
+            stored = null;
+            pending = null;
+            justCalculated = false;
+            show(message || '0');
+        }
+
+        // head 안에서는 body가 아직 없으므로, 문서가 다 읽힌 뒤에 버튼에 이벤트를 연결한다.
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // 숫자판 0~9, 소수점: 반복문으로 한 번에 연결
+            document.querySelectorAll('button.digit').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var d = btn.textContent;
+                    if (justCalculated) { current = ''; justCalculated = false; }
+                    if (d === '.' && current.indexOf('.') !== -1) { return; }
+                    if (d === '.' && current === '') { current = '0'; }
+                    current += d;
+                    showExpression();
+                });
+            });
+
+            // 연산기호: operations 표를 돌면서 연결
+            operations.forEach(function (op) {
+                document.querySelector('button#' + op.id).addEventListener('click', function () {
+                    if (current !== '') {
+                        var n = Number(current);
+                        if (stored !== null && pending) {
+                            stored = calculate(pending, stored, n);   // 2 + 3 x ... 처럼 이어서 계산
+                            if (stored === null) { reset('0으로 나눌 수 없어요'); return; }
+                        } else {
+                            stored = n;
+                        }
+                        expression += current + ' ' + op.symbol + ' ';
+                        current = '';
+                    } else if (pending) {
+                        // 연산기호를 연달아 누르면 마지막 기호만 바꾼다.
+                        expression = expression.replace(/\S $/, op.symbol + ' ');
+                    } else {
+                        return;
+                    }
+                    justCalculated = false;
+                    pending = op;
+                    showExpression();
+                });
+            });
+
+            // = 버튼: 수식은 지우고 결괏값만 보여 준다.
+            document.querySelector('button#equals').addEventListener('click', function () {
+                if (!pending || current === '') { return; }
+                var result = calculate(pending, stored, Number(current));
+                if (result === null) { reset('0으로 나눌 수 없어요'); return; }
+                show(result);
+                expression = '';
+                current = String(result);
+                stored = null;
+                pending = null;
+                justCalculated = true;
+            });
+
+            // C 버튼
+            document.querySelector('button#clear').addEventListener('click', function () {
+                reset();
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="calc">
+        <div id="title">🍊 🥭 🍋</div>
+        <div id="panel">
+        <div id="display">0</div>
+        <div id="keys">
+            <button class="digit">7</button>
+            <button class="digit">8</button>
+            <button class="digit">9</button>
+            <button id="div" class="op">/</button>
+
+            <button class="digit">4</button>
+            <button class="digit">5</button>
+            <button class="digit">6</button>
+            <button id="mul" class="op">x</button>
+
+            <button class="digit">1</button>
+            <button class="digit">2</button>
+            <button class="digit">3</button>
+            <button id="minus" class="op">-</button>
+
+            <button class="digit">0</button>
+            <button class="digit">.</button>
+            <button id="equals" class="op">=</button>
+            <button id="plus" class="op">+</button>
+
+            <button id="clear" class="fn">C</button>
+        </div>
+        </div>    </div>
+</body>
+</html>
