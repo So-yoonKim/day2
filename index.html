@@ -3,39 +3,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>카운터</title>
+  <title>화면 부품 지도</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
       min-height: 100vh;
       margin: 0;
       font-family: sans-serif;
+      background: #f2f7fb;
+      color: #333;
     }
-    #count {
-      font-size: 4rem;
-      margin-bottom: 1rem;
+    header {
+      background: #0b5ea8;
+      color: #fff;
+      padding: 1.25rem 1rem;
+      text-align: center;
     }
-    button {
-      font-size: 1.25rem;
-      padding: 0.5rem 1.5rem;
-      cursor: pointer;
+    header h1 { margin: 0; font-size: 1.5rem; }
+    header p { margin: 0.25rem 0 0; font-size: 0.9rem; }
+    .logo { height: 96px; margin-bottom: 0.5rem; background: #fff; border-radius: 8px; padding: 4px; }
+    nav { background: #084a85; }
+    nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      list-style: none;
+      margin: 0;
+      padding: 0.5rem;
     }
+    nav a {
+      display: block;
+      padding: 0.4rem 1rem;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 999px;
+    }
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem 1rem;
+      align-content: start;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .card h2 { margin: 0 0 0.75rem; font-size: 1.2rem; }
+    .card p { margin: 0; line-height: 1.5; }
+    .card ul { margin: 0; padding-left: 1.2rem; line-height: 1.6; }
+    footer {
+      background: #333;
+      color: #ddd;
+      text-align: center;
+      font-size: 0.85rem;
+      padding: 1rem;
+    }
+
+    /* 이름표 */
+    .part { position: relative; outline: 2px dashed #e5484d; outline-offset: -2px; }
+    .tag {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      z-index: 2;
+      background: #e5484d;
+      color: #fff;
+      font-size: 0.75rem;
+      line-height: 1.2;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-weight: normal;
+    }
+    .tag.inner { top: auto; bottom: 4px; left: auto; right: 4px; background: #7c3aed; }
+    .tag.card-tag { left: auto; right: 4px; background: #16a34a; }
+    .summary { background: #fff; padding: 1rem; max-width: 900px; margin: 0 auto 1.5rem; width: calc(100% - 2rem); border-radius: 8px; font-size: 0.9rem; line-height: 1.6; }
+    .summary .no { color: #999; }
   </style>
 </head>
 <body>
-  <div id="count">0</div>
-  <button id="btn">+2</button>
+  <header class="part">
+    <span class="tag">헤더</span>
+    <img class="logo" src="in_symbol.png" alt="제주대학교 로고">
+    <h1>제주대학교</h1>
+    <p>Jeju National University · 제주의 자연과 함께 성장하는 대학</p>
+  </header>
 
-  <script>
-    let count = 0;
-    const countEl = document.getElementById('count');
-    document.getElementById('btn').addEventListener('click', () => {
-      count += 2;
-      countEl.textContent = count;
-    });
-  </script>
+  <nav class="part">
+    <span class="tag">탭 (메뉴)</span>
+    <ul>
+      <li><a href="#about">대학 소개</a></li>
+      <li><a href="#admission">입학 안내</a></li>
+      <li><a href="#campus">캠퍼스 생활</a></li>
+      <li><a href="#location">오시는 길</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <article class="card part" id="about">
+      <span class="tag card-tag">카드</span>
+      <h2>🏫 대학 소개</h2>
+      <p>제주대학교는 제주특별자치도에 있는 국립대학교입니다. 제주의 자연·문화·산업을 바탕으로 지역과 세계를 잇는 인재를 기릅니다.</p>
+    </article>
+    <article class="card part" id="admission">
+      <span class="tag card-tag">카드</span>
+      <h2>📝 입학 안내</h2>
+      <ul class="part">
+        <span class="tag inner">목록</span>
+        <li>모집 요강 및 일정 확인</li>
+        <li>수시·정시 전형 안내</li>
+        <li>입학 상담 문의</li>
+      </ul>
+    </article>
+    <article class="card part" id="campus">
+      <span class="tag card-tag">카드</span>
+      <h2>🌳 캠퍼스 생활</h2>
+      <ul class="part">
+        <span class="tag inner">목록</span>
+        <li>한라산과 바다가 가까운 학습 환경</li>
+        <li>동아리·학생 활동</li>
+        <li>제주 감귤 등 지역 특화 연구</li>
+      </ul>
+    </article>
+    <article class="card part" id="location">
+      <span class="tag card-tag">카드</span>
+      <h2>📍 오시는 길</h2>
+      <p>제주특별자치도 제주시에 있습니다. 자세한 주소와 교통편은 공식 홈페이지에서 확인하세요.</p>
+    </article>
+  </main>
+
+  <div class="summary">
+    <strong>이름표 정리</strong><br>
+    헤더 1 · 탭(메뉴) 1 · 카드 4 · 목록 2<br>
+    <span class="no">버튼 · 입력창: index.html에 없음 (푸터는 이름표 목록 밖이라 붙이지 않음)</span>
+  </div>
+
+  <footer>
+    © 제주대학교 홍보 페이지 (학습용) · 로고와 내용은 공식 홈페이지 기준으로 확인하세요
+  </footer>
 </body>
 </html>
